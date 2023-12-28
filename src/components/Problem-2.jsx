@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import './Problem-2.css';
 
 const Problem2 = () => {
     const [contacts, setContacts] = useState([]);
+    const [onlyEven, setOnlyEven] = useState(false);
+    const [filterData, setFilterData] = useState(contacts);
+    const [activeButton, setActiveButton] = useState(null);
+
       const handleAllContacts=() => {
         fetch("https://contact.mediusware.com/api/contacts/")
           .then((res) => res.json())
           .then((data) => {
             setContacts(data.results);
-            //setFilterData(data);
-            console.log(data.results);
+            setFilterData(data.results);
+            setActiveButton("allContacts");
           });}
 
       const handleUSAContacts=() => {
@@ -16,9 +21,27 @@ const Problem2 = () => {
           .then((res) => res.json())
           .then((data) => {
             setContacts(data.results);
-            //setFilterData(data);
-            console.log(data.results);
+           setFilterData(data.results);
+            setActiveButton("usaContacts");
           });}
+
+          /* handel even number */
+          const handleEvenSerial = () => {
+            setOnlyEven((items) => !items);
+            if (!onlyEven) {
+              const updatedItems = items.filter((item) => item.id % 2 === 0);
+              setFilterData(updatedItems);
+            } else {
+              setFilterData(contacts);
+            }
+          };
+
+          // Update filterData when contacts change
+          useEffect(() => {
+            setFilterData(
+              onlyEven ? contacts.filter((item) => item.id % 2 === 0) : contacts
+            );
+          }, [contacts, onlyEven]);
 
     return (
       <div className="container">
@@ -60,16 +83,23 @@ const Problem2 = () => {
                 <h5 className="modal-title" id="myModalLabel">
                   <div className="d-flex justify-content-center gap-3">
                     <button
-                      className="btn btn-sm"
-                      style={{ backgroundColor: "#46139f", color: "white" }}
+                      className={` btn-sm ${
+                        activeButton === "allContacts"
+                          ? "all-contacts-active"
+                          : "all-contacts"
+                      }`}
+                      //style={{ backgroundColor: "#46139f", color: "white" }}
                       type="button"
                       onClick={handleAllContacts}
                     >
                       All Contacts
                     </button>
                     <button
-                      className="btn btn-sm"
-                      style={{ backgroundColor: "#ff7f50", color: "white" }}
+                      className={` btn-sm ${
+                        activeButton === "usaContacts"
+                          ? "usa-contacts-active"
+                          : "usa-contacts"
+                      }`}
                       type="button"
                       onClick={handleUSAContacts}
                     >
@@ -95,7 +125,7 @@ const Problem2 = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {contacts.map((contact) => (
+                    {filterData.map((contact) => (
                       <tr key={contact.id}>
                         <td scope="col">{contact.id}</td>
                         <td scope="col">{contact.phone}</td>
@@ -106,9 +136,23 @@ const Problem2 = () => {
                 </table>
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-primary">
-                  Save changes
-                </button>
+                <div className="text-gray-700 flex items-center gap-2">
+                  <div className="form-check form-switch">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id="onlyEvenCheckbox"
+                      onChange={handleEvenSerial}
+                      checked={onlyEven}
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="onlyEvenCheckbox"
+                    >
+                      Only Even
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

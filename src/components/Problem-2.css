@@ -1,0 +1,26 @@
+.all-contacts{
+    border: 2px solid #46139f;
+    color: #46139f;
+    font-size: 14px;
+    border-radius: 5px;
+}
+.all-contacts-active{
+    border: 2px solid #46139f;
+    background: #46139f;
+    color: white;
+    font-size: 14px;
+    border-radius: 5px;
+}
+.usa-contacts{
+    border: 2px solid #ff7f50;
+    color: #ff7f50;
+    font-size: 14px;
+    border-radius: 5px;
+}
+.usa-contacts-active{
+    border: 2px solid #ff7f50;
+    background: #ff7f50;
+    color: white;
+    font-size: 14px;
+    border-radius: 5px;
+}
