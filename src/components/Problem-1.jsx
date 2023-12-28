@@ -19,12 +19,21 @@ const Problem1 = () => {
       form.reset();
     };
 
+    /* handle data status sorting */
+    const sortStatus = filterData.sort((a, b) => {
+      const statusSorting = {
+        active: 1,
+        completed: 2,
+      };
+      return statusSorting[a.status] - statusSorting[b.status];
+    });
+
     const handleClick = (val) =>{
         const updatedItems = items.filter((item) => {
             return item.status === val;
         });
-        setShow(val);
         setFilterData(updatedItems);
+        setShow(val);
     }
 
     return (
@@ -68,8 +77,8 @@ const Problem1 = () => {
                   className={`nav-link ${show === "all" && "active"}`}
                   type="button"
                   onClick={() => {
-                    handleClick("all");
                     setFilterData(items);
+                    setShow("all");
                   }}
                 >
                   All
@@ -97,14 +106,19 @@ const Problem1 = () => {
             <div className="tab-content"></div>
             <table className="table table-striped ">
               <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Status</th>
+                  </tr>
+              </thead>
+              <tbody>
                 {filterData.map((item) => (
                   <tr key={item.id}>
-                    <th scope="col">{item.name}</th>
-                    <th scope="col">{item.status}</th>
+                    <td scope="col">{item.name}</td>
+                    <td scope="col">{item.status}</td>
                   </tr>
                 ))}
-              </thead>
-              <tbody></tbody>
+              </tbody>
             </table>
           </div>
         </div>
